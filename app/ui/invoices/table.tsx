@@ -4,6 +4,14 @@ import InvoiceStatus from '@/app/ui/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredInvoices } from '@/app/lib/data';
 
+// Note: When to use the useSearchParams() hook vs. the searchParams prop?
+
+// You might have noticed you used two different ways to extract search params. Whether you use one or the other depends on whether you're working on the client or the server.
+
+// <Search> is a Client Component, so you used the useSearchParams() hook to access the params from the client.
+// <Table> is a Server Component that fetches its own data, so you can pass the searchParams prop from the page to the component.
+// As a general rule, if you want to read the params from the client, use the useSearchParams() hook as this avoids having to go back to the server.
+
 export default async function InvoicesTable({
   query,
   currentPage,
