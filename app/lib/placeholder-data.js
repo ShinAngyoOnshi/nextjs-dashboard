@@ -70,7 +70,15 @@ const customers = [
     email: 'balazs@orban.com',
     image_url: '/customers/balazs-orban.png',
   },
+  {
+    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81cc',
+    name: 'Carlo Nicoletti',
+    email: 'carlo@mail.com',
+    image_url: '/customers/balazs-orban.png',
+  }
 ];
+
+console.log(customers.length);
 
 const invoices = [
   {
@@ -163,6 +171,12 @@ const invoices = [
     status: 'paid',
     date: '2022-06-05',
   },
+  // {
+  //   customer_id: customers[8].id,
+  //   amount: 10000000,
+  //   status: 'paid',
+  //   date: '2023-06-07',
+  // },
 ];
 
 const revenue = [
