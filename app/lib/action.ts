@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { error } from 'console';
 
-
+//insert type errors inside zod
 
 const FormSchema = z.object({
   id: z.string(),
@@ -30,6 +30,8 @@ const FormSchema = z.object({
   // you may want to consider using the entries() method with JS 
   // for example const rawFormData = Object.fromEntries(formData.entries())
 
+  //config state for useFormState hook
+
   export type State = {
     errors?: {
       customerId?: string[];
@@ -46,7 +48,7 @@ const FormSchema = z.object({
       status: formdata.get('status'),
         });
         console.log(validatedFields);
-
+        // insert generic error message if missing fields
         if (!validatedFields.success) {
           return {
             errors: validatedFields.error.flatten().fieldErrors,
@@ -57,7 +59,7 @@ const FormSchema = z.object({
         const { customerId, amount, status } = validatedFields.data;
         const amountInCents = amount * 100;
         const date = new Date().toISOString().split('T')[0]; // da approfondire
-        
+        //insert try/catch for handling database error
         try {
           await sql`
           INSERT INTO invoices (customer_id, amount, status, date)
@@ -73,7 +75,7 @@ const FormSchema = z.object({
     //Chapter 12 
     // console.log(typeof rawFormData.amount);
 }
-
+// add prevState and general condition and errors
 export async function updateInvoice(id: string, prevState: State, formData: FormData) {
     const validatedFields = UpdateInvoice.safeParse({
       customerId: formData.get('customerId'),
@@ -87,7 +89,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
         message: 'Missing Fields. Failed to Create Invoice.',
       };
     }
-
+    // debouncing? the old const in the new const
     const { customerId, amount, status } = validatedFields.data;
     const amountInCents = amount * 100;
    
@@ -104,7 +106,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
   }
-
+  // maybe remove this? add a throw error idk why...
   export async function deleteInvoice(id: string) {
     throw new Error('Failed to delete invoice');
     try {
