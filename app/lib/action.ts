@@ -5,6 +5,8 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { error } from 'console';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 //insert type errors inside zod
 
@@ -31,6 +33,25 @@ const FormSchema = z.object({
   // for example const rawFormData = Object.fromEntries(formData.entries())
 
   //config state for useFormState hook
+
+  export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+  ) {
+    try {
+      await signIn('credentials', formData);
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return 'Invalid credentials.';
+          default:
+            return 'Something went wrong.';
+        }
+      }
+      throw error;
+    }
+  }
 
   export type State = {
     errors?: {
@@ -108,12 +129,12 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
   }
   // maybe remove this? add a throw error idk why...
   export async function deleteInvoice(id: string) {
-    throw new Error('Failed to delete invoice');
     try {
       await sql`DELETE FROM invoices WHERE id = ${id}`;
       revalidatePath('/dashboard/invoices');
       return {message: 'Deleted Invoice.'};
     } catch (error) {
-      return {message: 'Database Error: Failed to delete invoice.'};
+      throw new Error('Failed to delete invoice');
+      // return {message: 'Database Error: Failed to delete invoice.'};
     }
   }
